@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Caliburn.Micro;
 using DictionaryRenderGraphicOverlay.Views;
 using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Mapping.Labeling;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
@@ -68,7 +70,10 @@ namespace DictionaryRenderGraphicOverlay.ViewModels
                 _mapView.Map.ReferenceScale = 4000;
 
                 _indicatorGraphicsOverlay = new();
+
                 _mapView.GraphicsOverlays.Add(_indicatorGraphicsOverlay);
+
+                
             }
 
             base.OnViewLoaded(view);
@@ -86,7 +91,8 @@ namespace DictionaryRenderGraphicOverlay.ViewModels
         {
             _dictionaryRendererOverlay = new()
             {
-                ScaleSymbols = true
+                ScaleSymbols = true,
+                LabelsEnabled = true
             };
             _mapView.GraphicsOverlays.Add(_dictionaryRendererOverlay);
 
@@ -95,8 +101,19 @@ namespace DictionaryRenderGraphicOverlay.ViewModels
 
             var exampleStyle = await DictionarySymbolStyle.CreateFromFileAsync(stylxPath);
             _dictionaryRendererOverlay.Renderer = new DictionaryRenderer(exampleStyle);
-            var attributes = new Dictionary<string, object> { { "Name", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eget mattis dolor. Integer id mauris volutpat, dictum tortor sit amet, viverra purus. Sed dapibus enim ac mattis condimentum. Vestibulum nec nibh magna. Cras mauris enim, pellentesque quis gravida malesuada, tincidunt in tortor. Nam suscipit, leo ut mollis venenatis, nisi ex varius leo, sed consectetur justo ligula in lacus. Nullam tristique cursus eleifend. Donec placerat non dui in varius. Donec dignissim velit eu elit efficitur, eu placerat purus ultrices. Quisque in ex rutrum, dignissim augue id, pellentesque diam. Vivamus lacinia diam mauris, vulputate rutrum nisi pharetra sed. Duis vehicula tellus ipsum, a rutrum purus bibendum nec. Morbi odio leo, fermentum vitae dictum vel, imperdiet at sapien. Nulla imperdiet leo dui, a efficitur diam consectetur hendrerit. Sed maximus est ac tincidunt sollicitudin. Sed vitae eros nec ante gravida scelerisque." } };
+            var attributes = new Dictionary<string, object>
+            {
+                { "Name", "A Shorter label" },
+                { "LabelText", "Some new text"},
+                { "Show", "true"}
+            };
             var graphic = new Graphic(_mapPoint1, attributes);
+
+            var exp = new ArcadeLabelExpression(@"$feature.LabelText + ' Always show'" );
+            var textSymbol = new TextSymbol();
+            var name = @"* NEW LABEL *";
+            var label = new LabelDefinition(exp, textSymbol);
+            _dictionaryRendererOverlay.LabelDefinitions.Add(label);
             _dictionaryRendererOverlay.Graphics.Add(graphic);
             await _mapView.SetViewpointCenterAsync(_mapPoint1, 6000);
 
