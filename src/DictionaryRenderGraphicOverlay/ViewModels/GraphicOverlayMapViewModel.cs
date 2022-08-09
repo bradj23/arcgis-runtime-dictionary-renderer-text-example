@@ -109,7 +109,7 @@ namespace DictionaryRenderGraphicOverlay.ViewModels
             };
             var graphic = new Graphic(_mapPoint1, attributes);
 
-            var exp = new ArcadeLabelExpression(@"$feature.LabelText + ' Always show'" );
+            var exp = new ArcadeLabelExpression(@"$feature.LabelText + $feature.MissingAttribute + ' Always show'" );
             var textSymbol = new TextSymbol();
             var name = @"* NEW LABEL *";
             var label = new LabelDefinition(exp, textSymbol);
