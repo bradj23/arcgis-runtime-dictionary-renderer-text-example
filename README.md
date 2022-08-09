@@ -1,2 +1,2 @@
 arcgis-runtime-dictionary-renderer-text-example
-This sample app is to illustrate how field populated text using a dictionary renderer is not displayed if the feature’s geometry is not in the map’s visible extent. There is a point geometry, symbolized as a flame with a long text that comes from the graphic’s attributes. The application starts at Position 1. If the user changes to Position 2 the text will not be visible even though it should extend into view. A way to further illustrate this is to switch back to position 1, Press the Add Current Extent to Map button and switch back to position 2. 
+This sample app is to illustrate how labels with missing attributes display differently between runtime 100.11 and 100.14.1.
